@@ -47,6 +47,8 @@ tutorial are also inspired by \cite{Jones1999THiH}.
   \url{http://www.cs.uu.nl/research/techreps/repo/CS-2002/2002-031.pdf}
 \emph{Generalizing Hindley-Milner Type Inference Algorithms}, and
 Chapter 22 of \emph{TAPL}.}
+\footnote{A Cornell course touchs on this topic and gives an OCaml implementation.
+            \url{http://www.cs.cornell.edu/Courses/cs3110/2009fa/lectures/lec26a.htm}}
 
 \section{Algorithm W}
 
