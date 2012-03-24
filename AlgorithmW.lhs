@@ -240,7 +240,7 @@ which is responsible for circularity type errors.
 mgu :: Type -> Type -> TI Subst
 mgu (TFun l r) (TFun l' r')  =  do  s1 <- mgu l l'
                                     s2 <- mgu (apply s1 r) (apply s1 r')
-                                    return (s1 `composeSubst` s2)
+                                    return (s2 `composeSubst` s1)
 mgu (TVar u) t               =  varBind u t
 mgu t (TVar u)               =  varBind u t
 mgu TInt TInt                =  return nullSubst
@@ -299,7 +299,7 @@ ti env (ELet x e1 e2) =
             t' = generalize (apply s1 env) t1
             env'' = TypeEnv (Map.insert x t' env')
         (s2, t2) <- ti (apply s1 env'') e2
-        return (s1 `composeSubst` s2, t2)
+        return (s2 `composeSubst` s1, t2)
 \end{code}
 %
 This is the main entry point to the type inferencer.  It simply calls
