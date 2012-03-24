@@ -341,6 +341,10 @@ e5  =  EAbs "m" (ELet "y" (EVar "m")
        
 e6  =  EApp (ELit (LInt 2)) (ELit (LInt 2))
 
+e7  =  EAbs "a" (ELet "x" (EAbs "b" (ELet "y" (EAbs "c" (EApp (EVar "a") (ELit (LInt 1))))
+                                     (EApp (EVar "y") (ELit (LInt 2)))))
+                 (EApp (EVar "x") (ELit (LInt 3))))
+
 \end{code}
 %
 This simple test function tries to infer the type for the given
@@ -365,7 +369,7 @@ type inference fails.
 
 \begin{code}
 main :: IO ()
-main = mapM_ test [e0, e1, e2, e3, e4, e5, e6]
+main = mapM_ test [e0, e1, e2, e3, e4, e5, e6, e7]
 -- |Collecting Constraints|
 -- |main = mapM_ test' [e0, e1, e2, e3, e4, e5]|
 \end{code}
