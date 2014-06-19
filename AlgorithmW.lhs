@@ -240,7 +240,7 @@ which is responsible for circularity type errors.
 mgu :: Type -> Type -> TI Subst
 mgu (TFun l r) (TFun l' r')  =  do  s1 <- mgu l l'
                                     s2 <- mgu (apply s1 r) (apply s1 r')
-                                    return (s1 `composeSubst` s2)
+                                    return (s2 `composeSubst` s1)
 mgu (TVar u) t               =  varBind u t
 mgu t (TVar u)               =  varBind u t
 mgu TInt TInt                =  return nullSubst
@@ -299,7 +299,7 @@ ti env (ELet x e1 e2) =
             t' = generalize (apply s1 env) t1
             env'' = TypeEnv (Map.insert x t' env')
         (s2, t2) <- ti (apply s1 env'') e2
-        return (s1 `composeSubst` s2, t2)
+        return (s2 `composeSubst` s1, t2)
 \end{code}
 %
 This is the main entry point to the type inferencer.  It simply calls
@@ -341,6 +341,13 @@ e5  =  EAbs "m" (ELet "y" (EVar "m")
        
 e6  =  EApp (ELit (LInt 2)) (ELit (LInt 2))
 
+e7  =  EAbs "a" (ELet "x" (EAbs "b" (ELet "y" (EAbs "c" (EApp (EVar "a") (ELit (LInt 1))))
+                                     (EApp (EVar "y") (ELit (LInt 2)))))
+                 (EApp (EVar "x") (ELit (LInt 3))))
+
+e8  =  EAbs "a" (EAbs "b"
+        (EApp (EVar "b") (EApp (EVar "a") (EApp (EVar "a") (EVar "b")))))
+
 \end{code}
 %
 This simple test function tries to infer the type for the given
@@ -365,7 +372,7 @@ type inference fails.
 
 \begin{code}
 main :: IO ()
-main = mapM_ test [e0, e1, e2, e3, e4, e5, e6]
+main = mapM_ test [e0, e1, e2, e3, e4, e5, e6, e7, e8]
 -- |Collecting Constraints|
 -- |main = mapM_ test' [e0, e1, e2, e3, e4, e5]|
 \end{code}
